@@ -71,6 +71,9 @@ Django Research in University
             <div class="accordion-body">
               <strong>Javascript 모듈을 활용한 음원 데이터 시각화</strong>
                   <img width="1433" alt="image" src="https://github.com/P-Chanyeop/Django-AI-Project/assets/112680039/74df0719-1bde-4275-99bd-a2166a208f49">
+                <img width="1348" alt="image" src="https://github.com/P-Chanyeop/Django-AI-Project/assets/112680039/19a09ea2-cd81-4d5c-912c-eda4838a4863">
+                <img width="1346" alt="image" src="https://github.com/P-Chanyeop/Django-AI-Project/assets/112680039/1b84d1f7-b8fc-4c43-b7f5-79a568cc4ccd">
+<img width="1305" alt="image" src="https://github.com/P-Chanyeop/Django-AI-Project/assets/112680039/43582da7-4e48-4f22-8e76-3aecbf04f2da">
             </div>
         </div>
         </div>
