@@ -52,7 +52,7 @@ Django Research in University
           </h2>
           <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <strong>Python을 활용한 AI 기술 사용</strong>
+              <strong>#2. Python을 활용한 AI 기술 사용</strong>
               <code>No-Contents</code>
             </div>
           </div>
@@ -64,7 +64,7 @@ Django Research in University
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              Data Analyze & Visualization
+              #3. Data Analyze & Visualization
             </button>
           </h2>
           <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -74,7 +74,11 @@ Django Research in University
             </div>
         </div>
         </div>
-            
+        <br>
+        <br>
+            <br>
+            <br>
+            <br>
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
