@@ -56,17 +56,25 @@ Django Research in University
               <code>No-Contents</code>
             </div>
           </div>
-            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Data Analyze & Visualization
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
               <strong>Javascript 모듈을 활용한 음원 데이터 시각화</strong>
                   <img width="1433" alt="image" src="https://github.com/P-Chanyeop/Django-AI-Project/assets/112680039/74df0719-1bde-4275-99bd-a2166a208f49">
             </div>
         </div>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
+        </div>
+            
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
