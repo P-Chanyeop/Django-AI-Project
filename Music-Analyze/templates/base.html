@@ -1,0 +1,56 @@
+{% load static %}
+<!-- 에러가 발생하지만 기능상 문제가 없으므로 무시 -->
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+
+
+{#    <py-env>#}
+{#        - numpy#}
+{#        - matplotlib#}
+{#        - IPython#}
+{#        - music21#}
+{#    </py-env>#}
+    {% block pyscript %}
+    {% endblock %}
+    {% block style %}
+    {% endblock %}
+    <title>Hello, pybo!</title>
+</head>
+<body>
+{#    <py-env>#}
+{#        - numpy#}
+{#        - matplotlib#}
+{#        - scipy#}
+{#        - librosa#}
+{#        - paths:#}
+{#            - {% static 'librosa.py' %}#}
+{#        - micropip#}
+{#        - asyncio#}
+{#        - scipy#}
+{#    </py-env>#}
+    <!-- 네비게이션바 -->
+    {% include "navbar.html" %}
+    <!-- 기본 템플릿 안에 삽입딜 내용 start -->
+    {% block content %}
+
+    {% endblock %}
+    {% block analyze %}
+        {% endblock %}
+    <!-- 기본 템플릿 안에 삽입될 내용 end -->
+    <!-- Bootstrap JS -->
+    <script src="{% static 'bootstrap.js' %}"></script>
+    <!-- 자바스크립트 Start -->
+    {% block script %}
+    {% endblock %}
+    <!-- 자바스크립트 End -->
+
+</body>
+</html>

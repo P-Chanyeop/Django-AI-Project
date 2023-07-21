@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block pyscript %}
+<script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+{#    <py-env>#}
+{#      - numpy#}
+{#      - matplotlib#}
+{#      - paths:#}
+{#        - librosa.py#}
+{#    </py-env>#}
+{#    <py-config type="json">#}
+{#        {#}
+{#          "packages": ["numpy", "matplotlib", "scipy", "plotly", "pandas"]#}
+{#        }#}
+{#      </py-config>#}
+    <style>
+body {
+
+}
+#canvas1 {
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+          background-color: black;
+      }
+#file-input {
+  {#position: fixed;#}
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+}
+
+#canvas {
+  {#position: fixed;#}
+  {#left: 0;#}
+  {#top: 0;#}
+  {#width: 100%;#}
+  {#height: 100%;#}
+}
+
+audio {
+  left: 10px;
+  bottom: 10px;
+}
+
+#name {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  z-index: 3;
+  color: #eeeeee;
+  font-family: monospace;
+}
+{##}
+{##background {#}
+{#  width: 100%;#}
+{#  height: 100%;#}
+{#  position: absolute;#}
+{#  top: 0;#}
+{#  left: 0;#}
+{#  background: linear-gradient(transparent,#00035f,transparent);#}
+{#  background-size: 100% 7px;#}
+{#  animation: bg 1s infinite linear;#}
+{#  z-index: 2;#}
+{#  opacity: 0.3;#}
+{# }#}
+
+@keyframes bg {
+  0%{ background-position: 0 0; }
+  100%{ background-position: 8px 8px; }
+}
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <!-- file upload start -->
+        <form id="upload-form" method="post" action= enctype="multipart/form-data">
+          {% csrf_token %}
+          <!-- 폼 요소들과 업로드 버튼 등을 추가 -->
+            <input type="text" id="title">
+          <input id="file" name="file" type="file" accept=".wav">
+          <button id="upload-button" type="button">업로드</button>
+        </form>
+        <!-- file upload end -->
+
+{#        <!-- analyze video start -->#}
+{#        <div style="margin-top: 50px">#}
+{#                <video style="width: 500px; height: 500px; " src="" id="video" controls muted></video>#}
+{#        </div>#}
+
+
+        <div style="margin-top: 50px;">
+            <form method="post" action="">
+            {% csrf_token %}
+            <label for="mpl">&lt;&lt; Librosa 소리 분석 데이터 차트 &gt;&gt;</label>
+            <div id="mpl" style="width: 100%; height: 50%" >
+            </div>
+            <button type="submit" id="submitBtn" >POST Request</button>
+            </form>
+        </div>
+{#            <input id="file" name="file" type="file" accept=".wav">#}
+{#            <audio id="audio-source" src=""></audio>#}
+{#            <audio id="audio-source" onclick="play()" controls></audio>#}
+{#            <button id="up" onclick="volumeDown()">볼륨 다운</button>#}
+{#            <button id="down" onclick="volumeUp()">볼륨 업</button>#}
+        <script>
+            var video = document.querySelector('#file');
+            var videourl = '';
+
+            video.addEventListener("change", function() {
+                const file = video.files[0];
+                videourl = URL.createObjectURL(file);
+            });
+
+            function videoPath(){
+                return videourl;
+            }
+        </script>
+
+{#        <py-script src="librosa.py" output="mpl">#}
+{#            import librosa#}
+{#            pitches = librosa.pitches#}
+{#            print(pitches)#}
+{#        </py-script>#}
+
+            <script>
+
+            {#$(document).ready(function() {#}
+            {#    $('#file').on('change', function(e) {#}
+            {#        let file = e.target.files[0];#}
+            {#        let formData = new FormData();#}
+            {#        formData.append('file', file);#}
+            {##}
+            {#        $.ajax({#}
+            {#            url: 'analyze/',  // 데이터 분석을 수행할 서버 엔드포인트 URL#}
+            {#            type: 'POST',#}
+            {#            data: formData,#}
+            {#            processData: false,#}
+            {#            contentType: false,#}
+            {#            success: function(response) {#}
+            {#                // 데이터 시각화를 수행한 결과를 받아서 처리#}
+            {#                // 예를 들어, mpl div 태그에 결과를 적용#}
+            {#                $('#mpl').html(response);#}
+            {#            },#}
+            {#            error: function(xhr, status, error) {#}
+            {#                console.error(error);#}
+            {#            }#}
+            {#        });#}
+            {#    });#}
+            {# }); #}
+
+            {#let btn = document.querySelector('#submitBtn');#}
+            {##}
+            {#btn.addEventListener('click', (event)=>{#}
+            {#    event.preventDefault();#}
+            {#    let file = document.querySelector('#file').files[0];#}
+                {#console.log(file);#}
+            {#    let formData = new FormData();#}
+            {#    formData.append('file', file);#}
+            {#    for (var key of formData.keys()) {#}
+                    {#console.log(key);#}
+            {#    }#}
+            {#    for (var value of formData.values()) {#}
+                    {#console.log(value);#}
+            {#    }#}
+            {##}
+            {#    $.ajax({#}
+            {#        url : 'analyze/',#}
+            {#        type : 'POST',#}
+            {#        processData: false,#}
+            {#        contentType: false,#}
+            {#        data : formData,#}
+            {#        success : function (response){#}
+            {#            console.log("response" + response);#}
+            {#        },#}
+            {#        error : function (){#}
+            {#            alert("error!!");#}
+            {#        },#}
+            {#    });#}
+            {# });#}
+
+            </script>
+        <div>
+        <section id="section1">
+            <h2>1 player, 2 visualizers</h2>
+            <midi-visualizer
+              type="piano-roll"
+{#              src="https://cdn.jsdelivr.net/gh/cifkao/html-midi-player@2b12128/twinkle_twinkle.mid"#}
+              src="{% static 'canon.mid' %}">
+            </midi-visualizer>
+            <midi-visualizer
+              type="staff"
+{#              src="https://cdn.jsdelivr.net/gh/cifkao/html-midi-player@2b12128/twinkle_twinkle.mid"#}
+              src="{% static 'canon.mid' %}">
+            </midi-visualizer>
+            <midi-player
+{#              src="https://cdn.jsdelivr.net/gh/cifkao/html-midi-player@2b12128/twinkle_twinkle.mid"#}
+                    src="{% static 'canon.mid' %}">
+              sound-font="visualizer="#section1 midi-visualizer">
+            </midi-player>
+            </section>
+        </div>
+{#        <script>#}
+{#    let videoPath = document.querySelector('#file');#}
+{#            let video = document.querySelector('#audio-source');#}
+{##}
+{#            videoPath.addEventListener("change", function(){#}
+{#                const file = videoPath.files[0];#}
+{#                videourl = URL.createObjectURL(file);#}
+{#                video.setAttribute("src", videourl);#}
+{#//                video.play();#}
+{#            })#}
+{#        </script>#}
+    <!-- analyze video end -->
+    <div style="width: 800px; height: 800px">
+            <input type="file" id="file-input" accept="audio/*,video/*,image/*" />
+            <canvas id="canvas"></canvas>
+            <h3 id="name"></h3>
+            <audio id="audio" controls></audio>
+            <div id="background"></div>
+    </div>
+
+
+    <canvas id="canvas1" width="512" height="256" ></canvas>
+
+
+  <!-- ----------------------------------------------------- -->
+
+
+  <!-- ----------------------------------------------------- -->
+
+
+  <script type="text/javascript">
+
+
+  </script>
+    </div>
+
+
+    <script src="{% static 'control.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" id="file-upload" value="file" accept="audio/*">
+        <audio src="" id="audio" controls></audio>
+        <button class='btn btn-danger' type="submit" id="submit">POST</button>
+    </form>
+    <div>
+        <img id="plot" src="" alt="분석 이미지">
+    </div>
+    <div id="results"></div>
+{#    <input type="file" id="file-upload" value="file" accept="audio/*">#}
+{#    <img id="plot" src="" alt="대체 이미지">#}
+    <script>
+            let input_file = document.querySelector("#file-upload");
+            let plot = document.querySelector("#plot");
+
+            $(document).ready(function(){
+                $('#submit').click(  e => {
+                    let tmpPath = URL.createObjectURL(input_file.files[0]);
+                    $('#audio').attr('src', tmpPath);
+
+                   e.preventDefault();
+                    // 1. FileList 취득
+                   const fileList = input_file.files;
+
+                    // 2. File 취득
+                    const file = fileList[0];
+                    console.log(file)
+
+                    // 3. Blob URL 생성
+                    const blobURL = window.URL.createObjectURL(file);
+                    console.log(blobURL);
+
+                    // 4. formData생성
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    console.log(formData.get('file'))
+                    let serializedFormData = Array.from(formData);
+                    console.log(serializedFormData);
+
+                $.ajax({
+                    type: 'post',
+                    url: '{% url 'post_analyze' %}',
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRFTOKEN' : '{{ csrf_token }}'
+                    },
+                    data: formData,
+                    success: function (data){
+                        console.log(file.name + " 분석 성공!!");
+                        plot.setAttribute("src", 'data:image/png;base64,' + data);
+                    },
+                    error : function (){
+                        alert("Failed post test!!");
+                    }
+                });
+            });
+          });
+    </script>
+{% endblock %}

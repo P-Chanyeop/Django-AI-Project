@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+<link href="{% static 'hello.css' %}" rel="stylesheet" />
+
+<style>
+
+    #chart {
+        max-width: 1080px;
+        margin: 35px auto;
+    }
+
+</style>
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" id="fileupload">
+        <button type="submit" id="submit">POST!!</button>
+    </form>
+    <div>
+        <h2>Plotly 차트 이미지 불러오기</h2>
+        <input type="text" id="jsonDataResponse" hidden>
+        <input type="text" id="jsonTimeResponse" hidden>
+        <div id="plot">
+
+        </div>
+    </div>
+        <div id="chart"></div>
+
+    <script>
+    function drawChart() {
+        let data = $('#jsonDataResponse').val().replaceAll("'", "")
+        data = data.replaceAll("[","");
+        data = data.replaceAll("]","");
+        data = data.split(",");
+        {#data = data.map((value) => (Number(value)));#}
+        {#data = data.map((value, index) => ({ x: index, y: Number(value) }));#}
+        console.log(data);
+        let time = $('#jsonTimeResponse').val().replaceAll("'", "")
+        time = time.replaceAll("[","");
+        time = time.replaceAll("]","");
+        time = time.split(",");
+        {#time = time.map((value) => (Number(value)));#}
+        {#time = time.map((value, index) => ({ x: index, y: Number(value) }));#}
+        console.log(time)
+        var options = {
+            series: [{
+                name: 'Servings',
+                data:data.slice(0,50),
+            }],
+            annotations: {
+                points: [{
+                    x: 'Bananas',
+                    seriesIndex: 0,
+                    label: {
+                        borderColor: '#775DD0',
+                        offsetY: 0,
+                        style: {
+                            color: '#fff',
+                            background: '#775DD0',
+                        },
+                        text: 'Bananas are good',
+                    }
+                }]
+            },
+            chart: {
+                height: 500,
+                type: 'bar',
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 10,
+                    columnWidth: '50%',
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 1
+            },
+
+            grid: {
+                row: {
+                    colors: ['#fff', '#f2f2f2']
+                }
+            },
+            xaxis: {
+                labels: {
+                    rotate: -45
+                },
+                categories: time.slice(0,50),
+                tickPlacement: 'on'
+            },
+            yaxis: {
+                title: {
+                    text: 'Servings',
+                },
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "horizontal",
+                    shadeIntensity: 0.25,
+                    gradientToColors: undefined,
+                    inverseColors: true,
+                    opacityFrom: 0.85,
+                    opacityTo: 0.85,
+                    stops: [50, 0, 100]
+                },
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    }
+        function sendRequest() {
+            input_file = document.querySelector('#fileupload');
+                    // 1. FileList 취득
+                   const fileList = input_file.files;
+
+                    // 2. File 취득
+                    const file = fileList[0];
+                    console.log(file)
+
+                    // 3. Blob URL 생성
+                    const blobURL = window.URL.createObjectURL(file);
+                    console.log(blobURL);
+
+                    // 4. formData생성
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    console.log(formData.get('file'))
+                    let serializedFormData = Array.from(formData);
+                    console.log(serializedFormData);
+            // Ajax 요청 보내기
+            $.ajax({
+                url: '{% url 'plotly_analyze' %}',
+                method: 'POST',
+                contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRFTOKEN' : '{{ csrf_token }}'
+                    },
+                data: formData,
+                success: function(response) {
+                  // 응답 받은 HTML 내용을 <div> 태그에 넣어주기
+                  {#$('#plot').html(response);#}
+                    console.log(response);
+                    $('#jsonDataResponse').attr('value',response.data);
+                    $('#jsonTimeResponse').attr('value',response.time);
+                    drawChart();
+                },
+                error: function(xhr, status, error) {
+                  console.error('Request failed:', status, error);
+                }
+            });
+        }
+
+        // 페이지 로드 시 비동기 요청 보내기
+        $(document).ready(function() {
+            $('#submit').click(  e => {
+                e.preventDefault();
+                sendRequest();
+            });
+        });
+    </script>
+    <style>
+
+        #chart {
+      max-width: 650px;
+      margin: 35px auto;
+    }
+
+    </style>
+
+    <script>
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+        )
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+    <script>
+      // Replace Math.random() with a pseudo-random number generator to get reproducible results in e2e tests
+      // Based on https://gist.github.com/blixt/f17b47c62508be59987b
+      var _seed = 42;
+      Math.random = function() {
+        _seed = _seed * 16807 % 2147483647;
+        return (_seed - 1) / 2147483646;
+      };
+    </script>
+
+
+
+
+{% endblock %}
