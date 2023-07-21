@@ -55,6 +55,10 @@ Django Research in University
               <strong>Python을 활용한 AI 기술 사용</strong>
               <code>No-Contents</code>
             </div>
+              <div>
+                  <strong>Javascript 모듈을 활용한 음원 데이터 시각화</strong>
+                  <img width="1433" alt="image" src="https://github.com/P-Chanyeop/Django-AI-Project/assets/112680039/74df0719-1bde-4275-99bd-a2166a208f49">
+              </div>
           </div>
         </div>
             <br>
